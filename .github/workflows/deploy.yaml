@@ -10,7 +10,7 @@ jobs :
     steps:
       - name: checkout code
         uses : actions/checkout@v4
-      - run : docker build -t ${{secrets.DOCKER_HUB_USER_NAME}}/medminds .
+      - run : docker build -t prashanthere/medminds .
       - run : echo "${{secrets.DOCKER_HUB_PASSWORD}}" | docker login -u ${{secrets.DOCKER_HUB_USER_NAME}} --password-stdin
       - run : docker push ${{secrets.DOCKER_HUB_USER_NAME}}/medminds:latest
       # - run : docker run -p 5000:5000 ${{secrets.DOCKER_HUB_USER_NAME}}/test-docker:latest
