@@ -4,8 +4,8 @@ on :
   push:
 
 jobs :
-  test:
-    runs-on: ubuntu-latest
+  # test:
+  #   runs-on: ubuntu-latest
     
 
   deploy:
