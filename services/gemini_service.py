@@ -43,7 +43,3 @@ def generate_explanation(report_text: str, language: str) -> str:
         return result.text
 
     return "No explanation generated"
-
-
-    """
-    """
