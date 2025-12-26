@@ -44,5 +44,6 @@ def generate_explanation(report_text: str, language: str) -> str:
 
     return "No explanation generated"
 
- """
+
+    """
     """
