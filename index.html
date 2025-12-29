@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMinds.AI | Your Medical AI Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* Landing Page Styles */
+        .landing-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+        
+        .landing-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 22px;
+            color: #7c3aed;
+        }
+        
+        .logo i {
+            font-size: 24px;
+        }
+        
+        .landing-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .landing-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .landing-subtitle {
+            font-size: 20px;
+            color: #6b7280;
+            margin-bottom: 40px;
+            max-width: 700px;
+        }
+        
+        .get-started-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+        
+        .get-started-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+        }
+        
+        /* Chat Interface Styles (Hidden Initially) */
+        .chat-container {
+            display: none;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            overflow: hidden;
+        }
+        
+        .chat-wrapper {
+            display: flex;
+            height: 100%;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .new-chat-btn {
+            background-color: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 30px;
+            transition: background-color 0.3s;
+        }
+        
+        .new-chat-btn:hover {
+            background-color: #6d28d9;
+        }
+        
+        .conversations-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .conversation-list {
+            list-style: none;
+        }
+        
+        .conversation-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+            color: #4b5563;
+        }
+        
+        .conversation-item:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .conversation-item.active {
+            background-color: #ede9fe;
+            color: #7c3aed;
+            font-weight: 500;
+        }
+        
+        .conversation-item i {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .radiology-section {
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .radiology-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            background-color: #f0f9ff;
+            margin-top: 10px;
+            color: #0369a1;
+            cursor: pointer;
+        }
+        
+        .radiology-item i {
+            margin-right: 10px;
+            color: #0ea5e9;
+        }
+        
+        /* Main Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+        
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .chat-title span {
+            color: #7c3aed;
+        }
+        
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .user-avatar {
+            background-color: #7c3aed;
+            color: white;
+        }
+        
+        .ai-avatar {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .message-content {
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+        
+        .user-message .message-content {
+            background-color: #7c3aed;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message .message-content {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .parameter-highlight {
+            background-color: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .parameter-name {
+            font-weight: 700;
+            color: #0369a1;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .normal-range {
+            background-color: #e8f5e8;
+            color: #137333;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .abnormal-range {
+            background-color: #fce8e6;
+            color: #d93025;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Health Severity Indicators */
+        .health-severity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .severity-normal {
+            background-color: #e8f5e8;
+            color: #137333;
+            border-left: 4px solid #34a853;
+        }
+        
+        .severity-medium {
+            background-color: #fef7e0;
+            color: #ea8600;
+            border-left: 4px solid #fbbc04;
+        }
+        
+        .severity-serious {
+            background-color: #fce8e6;
+            color: #d93025;
+            border-left: 4px solid #ea4335;
+        }
+        
+        .severity-icon {
+            font-size: 18px;
+        }
+        
+        .severity-text {
+            flex: 1;
+        }
+        
+        .severity-badge {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Health Summary Cards */
+        .health-summary {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .overall-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-excellent {
+            background-color: #e8f5e8;
+            color: #137333;
+        }
+        
+        .status-good {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .status-attention {
+            background-color: #fef7e0;
+            color: #ea8600;
+        }
+        
+        .status-concern {
+            background-color: #fce8e6;
+            color: #d93025;
+        }
+        
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .parameter-item {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .parameter-info {
+            flex: 1;
+        }
+        
+        .parameter-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .parameter-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .parameter-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 12px;
+        }
+        
+        .status-green {
+            background-color: #34a853;
+        }
+        
+        .status-yellow {
+            background-color: #fbbc04;
+        }
+        
+        .status-red {
+            background-color: #ea4335;
+        }
+        
+        /* Recommendations */
+        .recommendations {
+            background-color: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .recommendations-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .recommendation-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Input Area */
+        .input-container {
+            padding: 20px 30px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            background-color: #f9fafb;
+            border-radius: 24px;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            min-height: 52px;
+        }
+        
+        .input-wrapper:focus-within {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .attach-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            size: 0cap;
+        }
+        
+        .attach-btn:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .chat-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 8px;
+            font-size: 16px;
+            outline: none;
+            color: #1f2937;
+            resize: none;
+            max-height: 120px;
+            min-height: 24px;
+            line-height: 1.5;
+        }
+        
+        .chat-input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .send-btn {
+            background-color: #7c3aed;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+        
+        .send-btn.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .send-btn:hover.active {
+            background-color: #6d28d9;
+            transform: scale(1.05);
+        }
+        
+        .input-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+        
+        .input-hint {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .language-selector {
+            position: relative;
+        }
+        
+        .language-btn {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .language-btn:hover {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            min-width: 160px;
+            display: none;
+            margin-bottom: 8px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .language-option:last-child {
+            border-bottom: none;
+        }
+        
+        .language-option:hover {
+            background-color: #f9fafb;
+        }
+        
+        .language-option.active {
+            background-color: #ede9fe;
+            color: #7c3aed;
+            font-weight: 500;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 20px;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        .input-hint {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: flex;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                overflow-y: auto;
+            }
+            
+            .landing-title {
+                font-size: 36px;
+            }
+            
+            .landing-subtitle {
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            
+            .landing-title {
+                font-size: 28px;
+            }
+            
+            .landing-content {
+                padding: 40px 20px;
+            }
+            
+            .chat-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="landing-container" id="landingPage">
+        <nav class="landing-nav">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>MedMinds.AI</span>
+            </div>
+            <button class="get-started-btn" id="landingGetStartedBtn">
+                <i class="fas fa-rocket"></i> Get Started
+            </button>
+        </nav>
+        
+        <div class="landing-content">
+            <h1 class="landing-title">Understand your medical reports in simple language</h1>
+            <p class="landing-subtitle">Upload any lab report and get an easy explanation in seconds.</p>
+            <button class="get-started-btn" id="mainGetStartedBtn">
+                <i class="fas fa-cloud-upload-alt"></i> Get started
+            </button>
+        </div>
+    </div>
+    
+    <!-- Chat Interface -->
+    <div class="chat-container" id="chatInterface">
+        <div class="chat-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-brain" style="color: #7c3aed; font-size: 22px;"></i>
+                    <div class="sidebar-title">MedMinds.AI</div>
+                </div>
+                
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i> New conversation
+                </button>
+                
+                <div class="conversations-section">
+                    <div class="section-title">Recent conversations</div>
+                    <ul class="conversation-list">
+                        <li class="conversation-item active">
+                            <i class="fas fa-file-medical"></i> Blood test – Dec 27
+                        </li>
+                        <li class="conversation-item">
+                            <i class="fas fa-file-medical"></i> Thyroid report
+                        </li>
+                        <li class="conversation-item">
+                            <i class="fas fa-file-medical"></i> Annual check-up
+                        </li>
+                    </ul>
+                </div>
+                
+                
+            </aside>
+            
+            <!-- Main Chat Area -->
+            <main class="chat-area">
+                <header class="chat-header">
+                    <div class="chat-title">MedMinds.<span>AI</span> Assistant</div>
+                </header>
+                
+                <div class="messages-container" id="messagesContainer">
+                    <!-- User Message -->
+                    <div class="message user-message fade-in">
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">
+                            Please explain my CBC report
+                        </div>
+                    </div>
+                    
+                    <!-- AI Response -->
+                    <div class="message ai-message slide-in-right">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Of course! Let's start with your <strong>Hemoglobin (HGB)</strong> value.</p>
+                            
+                            <div class="parameter-highlight">
+                                <div class="parameter-name">Hemoglobin (HGB)</div>
+                                <p>This is the oxygen-carrying protein in your blood cells. Think of hemoglobin as a bus that transports oxygen throughout your body.</p>
+                                <div class="normal-range">Normal range for adults: 12.0 to 17.5 grams per deciliter (g/dL)</div>
+                            </div>
+                            
+                            <p>Your HGB value appears to be within the normal range, which means your blood is effectively carrying oxygen to your organs and tissues.</p>
+                            <p>Would you like me to explain any other values from your CBC report, such as WBC (white blood cells), RBC (red blood cells), or platelets?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <div class="input-actions">
+                            <button class="attach-btn" id="attachBtn" title="Attach file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                        </div>
+                        <textarea class="chat-input" id="chatInput" placeholder="Message MedMinds.AI..." rows="1"></textarea>
+                        <button class="send-btn" id="sendMessageBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="input-bottom">
+                        <div class="input-hint" id="inputHint">
+                            MedMinds.AI can make mistakes. Check important info.
+                        </div>
+                        <div class="language-selector">
+                            <button class="language-btn" id="languageBtn">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLanguage">English</span>
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                            <div class="language-dropdown" id="languageDropdown">
+                                <div class="language-option active" data-lang="en" data-name="English">
+                                    🇺🇸 English
+                                </div>
+                                <div class="language-option" data-lang="hi" data-name="हिंदी">
+                                    🇮🇳 हिंदी (Hindi)
+                                </div>
+                                <div class="language-option" data-lang="mr" data-name="मराठी">
+                                    🇮🇳 मराठी (Marathi)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typing Indicator -->
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span id="typingText">MedMinds.AI is typing</span>
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                uploadBtn: "Upload a report",
+                newChat: "New conversation",
+                inputPlaceholder: "Message MedMinds.AI...",
+                inputHint: "MedMinds.AI can make mistakes. Check important info.",
+                typing: "MedMinds.AI is typing",
+                welcomeMessage: `
+                    <p>Hello! I'm your MedMinds.AI assistant. I can help you understand your medical reports and lab results.</p>
+                    <p>You can:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>Upload a medical report</li>
+                        <li>Ask questions about specific lab values</li>
+                        <li>Get explanations in simple, plain language</li>
+                    </ul>
+                    <p>How can I assist you today?</p>
+                `,
+                bloodTestResponse: `
+                    <div class="health-summary">
+                        <div class="summary-header">
+                            <div class="summary-title">Blood Test Analysis</div>
+                            <div class="overall-status status-excellent">
+                                <i class="fas fa-check-circle"></i> Excellent
+                            </div>
+                        </div>
+                        
+                        <div class="parameter-grid">
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">Hemoglobin (RBC)</div>
+                                    <div class="parameter-value">14.2 g/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">White Blood Cells</div>
+                                    <div class="parameter-value">6.8 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">Platelets</div>
+                                    <div class="parameter-value">285 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">Glucose</div>
+                                    <div class="parameter-value">95 mg/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-severity severity-normal">
+                        <div class="severity-icon">✅</div>
+                        <div class="severity-text">All blood parameters are within normal ranges</div>
+                        <div class="severity-badge">Normal</div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <div class="recommendations-title">
+                            <i class="fas fa-lightbulb"></i> Recommendations
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>Continue maintaining a healthy lifestyle</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>Regular follow-up in 6-12 months</span>
+                        </div>
+                    </div>
+                `
+            },
+            hi: {
+                uploadBtn: "रिपोर्ट अपलोड करें",
+                newChat: "नई बातचीत",
+                inputPlaceholder: "MedMinds.AI को संदेश भेजें...",
+                inputHint: "MedMinds.AI गलतियाँ कर सकता है। महत्वपूर्ण जानकारी की जाँच करें।",
+                typing: "MedMinds.AI टाइप कर रहा है",
+                welcomeMessage: `
+                    <p>नमस्ते! मैं आपका MedMinds.AI सहायक हूँ। मैं आपकी मेडिकल रिपोर्ट और लैब परिणामों को समझने में मदद कर सकता हूँ।</p>
+                    <p>आप कर सकते हैं:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>मेडिकल रिपोर्ट अपलोड करना</li>
+                        <li>विशिष्ट लैब वैल्यू के बारे में प्रश्न पूछना</li>
+                        <li>सरल भाषा में स्पष्टीकरण प्राप्त करना</li>
+                    </ul>
+                    <p>आज मैं आपकी कैसे सहायता कर सकता हूँ?</p>
+                `,
+                bloodTestResponse: `
+                    <div class="health-summary">
+                        <div class="summary-header">
+                            <div class="summary-title">रक्त परीक्षण विश्लेषण</div>
+                            <div class="overall-status status-excellent">
+                                <i class="fas fa-check-circle"></i> उत्कृष्ट
+                            </div>
+                        </div>
+                        
+                        <div class="parameter-grid">
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">हीमोग्लोबिन (RBC)</div>
+                                    <div class="parameter-value">14.2 g/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">सफेद रक्त कोशिकाएं</div>
+                                    <div class="parameter-value">6.8 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">प्लेटलेट्स</div>
+                                    <div class="parameter-value">285 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">ग्लूकोज</div>
+                                    <div class="parameter-value">95 mg/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-severity severity-normal">
+                        <div class="severity-icon">✅</div>
+                        <div class="severity-text">सभी रक्त पैरामीटर सामान्य सीमा में हैं</div>
+                        <div class="severity-badge">सामान्य</div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <div class="recommendations-title">
+                            <i class="fas fa-lightbulb"></i> सुझाव
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>स्वस्थ जीवनशैली बनाए रखना जारी रखें</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>6-12 महीने में नियमित फॉलो-अप</span>
+                        </div>
+                    </div>
+                `
+            },
+            mr: {
+                uploadBtn: "अहवाल अपलोड करा",
+                newChat: "नवीन संभाषण",
+                inputPlaceholder: "MedMinds.AI ला संदेश पाठवा...",
+                inputHint: "MedMinds.AI चुका करू शकतो. महत्वाची माहिती तपासा.",
+                typing: "MedMinds.AI टाइप करत आहे",
+                welcomeMessage: `
+                    <p>नमस्कार! मी तुमचा MedMinds.AI सहाय्यक आहे. मी तुमचे वैद्यकीय अहवाल आणि प्रयोगशाळा परिणाम समजून घेण्यात मदत करू शकतो.</p>
+                    <p>तुम्ही करू शकता:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>वैद्यकीय अहवाल अपलोड करणे</li>
+                        <li>विशिष्ट प्रयोगशाळा मूल्यांबद्दल प्रश्न विचारणे</li>
+                        <li>सोप्या भाषेत स्पष्टीकरण मिळवणे</li>
+                    </ul>
+                    <p>आज मी तुमची कशी मदत करू शकतो?</p>
+                `,
+                bloodTestResponse: `
+                    <div class="health-summary">
+                        <div class="summary-header">
+                            <div class="summary-title">रक्त चाचणी विश्लेषण</div>
+                            <div class="overall-status status-excellent">
+                                <i class="fas fa-check-circle"></i> उत्कृष्ट
+                            </div>
+                        </div>
+                        
+                        <div class="parameter-grid">
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">हिमोग्लोबिन (RBC)</div>
+                                    <div class="parameter-value">14.2 g/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">पांढऱ्या रक्तपेशी</div>
+                                    <div class="parameter-value">6.8 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">प्लेटलेट्स</div>
+                                    <div class="parameter-value">285 K/μL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                            <div class="parameter-item">
+                                <div class="parameter-info">
+                                    <div class="parameter-label">ग्लुकोज</div>
+                                    <div class="parameter-value">95 mg/dL</div>
+                                </div>
+                                <div class="parameter-status status-green"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-severity severity-normal">
+                        <div class="severity-icon">✅</div>
+                        <div class="severity-text">सर्व रक्त पॅरामीटर सामान्य मर्यादेत आहेत</div>
+                        <div class="severity-badge">सामान्य</div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <div class="recommendations-title">
+                            <i class="fas fa-lightbulb"></i> शिफारसी
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>निरोगी जीवनशैली चालू ठेवा</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fas fa-check" style="color: #34a853; margin-top: 2px;"></i>
+                            <span>6-12 महिन्यांत नियमित फॉलो-अप</span>
+                        </div>
+                    </div>
+                `
+            }
+        };
+        
+        let currentLang = 'en';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const landingPage = document.getElementById('landingPage');
+            const chatInterface = document.getElementById('chatInterface');
+            const getStartedButtons = document.querySelectorAll('.get-started-btn, #landingGetStartedBtn, #mainGetStartedBtn');
+            const newChatBtn = document.getElementById('newChatBtn');
+            const uploadReportBtn = document.getElementById('uploadReportBtn');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            const chatInput = document.getElementById('chatInput');
+            const messagesContainer = document.getElementById('messagesContainer');
+            const conversationItems = document.querySelectorAll('.conversation-item');
+            const attachBtn = document.getElementById('attachBtn');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const languageBtn = document.getElementById('languageBtn');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const currentLanguageSpan = document.getElementById('currentLanguage');
+            const inputHint = document.getElementById('inputHint');
+            const typingText = document.getElementById('typingText');
+            
+            // Language selector functionality
+            languageBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                languageDropdown.classList.remove('show');
+            });
+            
+            // Language option selection
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    const name = this.dataset.name;
+                    
+                    // Update active state
+                    document.querySelectorAll('.language-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update current language
+                    currentLang = lang;
+                    currentLanguageSpan.textContent = name;
+                    
+                    // Update UI text
+                    updateLanguage();
+                    
+                    // Close dropdown
+                    languageDropdown.classList.remove('show');
+                });
+            });
+            
+            // Update UI text based on selected language
+            function updateLanguage() {
+                const t = translations[currentLang];
+                
+                // Update button texts
+                document.querySelector('.new-chat-btn').innerHTML = `<i class="fas fa-plus"></i> ${t.newChat}`;
+                
+                // Update input placeholder and hint
+                chatInput.placeholder = t.inputPlaceholder;
+                inputHint.textContent = t.inputHint;
+                typingText.textContent = t.typing;
+            }
+            
+            // Auto-resize textarea
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                
+                // Update send button state
+                updateSendButtonState();
+            });
+            
+            // Update send button state based on input
+            function updateSendButtonState() {
+                const hasText = chatInput.value.trim().length > 0;
+                if (hasText) {
+                    sendMessageBtn.classList.add('active');
+                } else {
+                    sendMessageBtn.classList.remove('active');
+                }
+            }
+            
+            // Attach button functionality
+            attachBtn.addEventListener('click', function() {
+                // Create file input
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx';
+                fileInput.style.display = 'none';
+                
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        handleFileUpload(file);
+                    }
+                });
+                
+                document.body.appendChild(fileInput);
+                fileInput.click();
+                document.body.removeChild(fileInput);
+            });
+            
+            // Switch to chat interface when Get Started is clicked
+            getStartedButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Fade out landing page
+                    landingPage.style.opacity = '0';
+                    landingPage.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        landingPage.classList.add('hidden');
+                        chatInterface.classList.remove('hidden');
+                        chatInterface.classList.add('visible');
+                        
+                        // Trigger animations in chat interface
+                        setTimeout(() => {
+                            document.querySelectorAll('.fade-in, .slide-in-right').forEach(el => {
+                                el.style.opacity = '1';
+                                el.style.transform = 'translateY(0)';
+                            });
+                        }, 100);
+                    }, 300);
+                });
+            });
+            
+            // New conversation button
+            newChatBtn.addEventListener('click', function() {
+                // Clear active state from all conversations
+                conversationItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Clear chat messages and show welcome message in selected language
+                const t = translations[currentLang];
+                messagesContainer.innerHTML = `
+                    <div class="message ai-message fade-in">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            ${t.welcomeMessage}
+                        </div>
+                    </div>
+                `;
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Show notification in selected language
+                const notificationText = currentLang === 'hi' ? "नई बातचीत शुरू करने के लिए एक रिपोर्ट अपलोड करें या प्रश्न पूछें।" :
+                                       currentLang === 'mr' ? "नवीन संभाषण सुरू करण्यासाठी अहवाल अपलोड करा किंवा प्रश्न विचारा।" :
+                                       "Start a new conversation by uploading a report or asking a question.";
+                showNotification(notificationText);
+            });
+            
+            // Send message on button click
+            sendMessageBtn.addEventListener('click', sendMessage);
+            
+            // Send message on Enter key (but allow Shift+Enter for new line)
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (chatInput.value.trim()) {
+                        sendMessage();
+                    }
+                }
+            });
+            
+            // Handle file upload
+            function handleFileUpload(file) {
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2); // MB
+                
+                // Add user message about file upload
+                addMessage("user", `📎 Uploaded: ${fileName} (${fileSize} MB)`, true);
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate file processing
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    
+                    const aiResponse = `
+                        <p>I've received your file: <strong>${fileName}</strong></p>
+                        <p>I'm analyzing the document now. This may take a few moments...</p>
+                        
+                        <div class="parameter-highlight">
+                            <div class="parameter-name">Document Analysis</div>
+                            <p>Processing medical report and extracting key information...</p>
+                        </div>
+                    `;
+                    
+                    addMessage("AI", aiResponse, false);
+                    
+                    // Simulate analysis completion
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            const analysisResult = generateFileAnalysisResponse(fileName);
+                            addMessage("AI", analysisResult, false);
+                        }, 2000);
+                    }, 3000);
+                }, 1500);
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                typingIndicator.style.display = 'flex';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTypingIndicator() {
+                typingIndicator.style.display = 'none';
+            }
+            
+            // Generate file analysis response
+            function generateFileAnalysisResponse(fileName) {
+                const fileType = fileName.toLowerCase();
+                
+                if (fileType.includes('blood') || fileType.includes('cbc')) {
+                    return `
+                        <p>✅ <strong>Analysis Complete!</strong></p>
+                        <p>I've analyzed your blood test report. Here are the key findings:</p>
+                        
+                        <div class="parameter-highlight">
+                            <div class="parameter-name">Blood Test Results Summary</div>
+                            <ul style="padding-left: 20px; margin-top: 10px;">
+                                <li><strong>Hemoglobin:</strong> 14.2 g/dL (Normal range: 12.0-17.5)</li>
+                                <li><strong>White Blood Cells:</strong> 6.8 K/μL (Normal range: 4.5-11.0)</li>
+                                <li><strong>Platelets:</strong> 285 K/μL (Normal range: 150-450)</li>
+                                <li><strong>Glucose:</strong> 95 mg/dL (Normal range: 70-100)</li>
+                            </ul>
+                            <div class="normal-range">✅ All values are within normal ranges</div>
+                        </div>
+                        
+                        <p>Your blood work looks excellent! All major parameters are within healthy ranges. Would you like me to explain any specific values in more detail?</p>
+                    `;
+                } else {
+                    return `
+                        <p>✅ <strong>Document Processed Successfully!</strong></p>
+                        <p>I've analyzed your medical document and extracted the key information:</p>
+                        
+                        <div class="parameter-highlight">
+                            <div class="parameter-name">Document Summary</div>
+                            <p>The report contains several medical parameters and test results. Most values appear to be within normal ranges.</p>
+                            <ul style="padding-left: 20px; margin-top: 10px;">
+                                <li>Patient information verified</li>
+                                <li>Test dates and reference ranges identified</li>
+                                <li>Key biomarkers extracted and analyzed</li>
+                            </ul>
+                        </div>
+                        
+                        <p>What specific aspects of this report would you like me to explain in simple terms?</p>
+                    `;
+                }
+            }
+            
+            // Conversation items click
+            conversationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    conversationItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Load conversation based on which item was clicked
+                    const conversationText = this.textContent.trim();
+                    
+                    if (conversationText.includes('Blood test')) {
+                        loadBloodTestConversation();
+                    } else if (conversationText.includes('Thyroid')) {
+                        loadThyroidConversation();
+                    } else if (conversationText.includes('Annual')) {
+                        loadAnnualCheckupConversation();
+                    }
+                });
+            });
+            
+            // Load the blood test conversation (default)
+            function loadBloodTestConversation() {
+                messagesContainer.innerHTML = `
+                    <div class="message user-message fade-in">
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">
+                            Please explain my CBC report
+                        </div>
+                    </div>
+                    
+                    <div class="message ai-message slide-in-right">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Of course! Let's start with your <strong>Hemoglobin (HGB)</strong> value.</p>
+                            
+                            <div class="parameter-highlight">
+                                <div class="parameter-name">Hemoglobin (HGB)</div>
+                                <p>This is the oxygen-carrying protein in your blood cells. Think of hemoglobin as a bus that transports oxygen throughout your body.</p>
+                                <div class="normal-range">Normal range for adults: 12.0 to 17.5 grams per deciliter (g/dL)</div>
+                            </div>
+                            
+                            <p>Your HGB value appears to be within the normal range, which means your blood is effectively carrying oxygen to your organs and tissues.</p>
+                            <p>Would you like me to explain any other values from your CBC report, such as WBC (white blood cells), RBC (red blood cells), or platelets?</p>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Load thyroid conversation
+            function loadThyroidConversation() {
+                messagesContainer.innerHTML = `
+                    <div class="message user-message fade-in">
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">
+                            Can you explain my thyroid report?
+                        </div>
+                    </div>
+                    
+                    <div class="message ai-message slide-in-right">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>I'd be happy to help with your thyroid report!</p>
+                            
+                            <div class="parameter-highlight">
+                                <div class="parameter-name">Thyroid-Stimulating Hormone (TSH)</div>
+                                <p>TSH is produced by your pituitary gland and tells your thyroid how much hormone to make. Think of it as a thermostat for your thyroid.</p>
+                                <div class="normal-range">Normal range: 0.4 to 4.0 mIU/L</div>
+                            </div>
+                            
+                            <p>Your TSH level is 2.5 mIU/L, which is within the normal range. This suggests your thyroid is functioning properly.</p>
+                            <p>Would you like me to explain your T3 and T4 levels as well?</p>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Load annual checkup conversation
+            function loadAnnualCheckupConversation() {
+                messagesContainer.innerHTML = `
+                    <div class="message user-message fade-in">
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">
+                            What should I know about my annual checkup results?
+                        </div>
+                    </div>
+                    
+                    <div class="message ai-message slide-in-right">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Based on your annual checkup, here are the key findings:</p>
+                            
+                            <div class="parameter-highlight">
+                                <div class="parameter-name">Overall Health Summary</div>
+                                <p>Most of your results are within normal ranges, which is excellent news!</p>
+                                <ul style="padding-left: 20px; margin-top: 10px;">
+                                    <li><strong>Blood Pressure:</strong> 118/76 mmHg (Normal)</li>
+                                    <li><strong>Cholesterol:</strong> Total 185 mg/dL (Good)</li>
+                                    <li><strong>Blood Sugar:</strong> 92 mg/dL (Normal)</li>
+                                </ul>
+                            </div>
+                            
+                            <p>Your Vitamin D level is slightly low at 22 ng/mL (optimal is 30-50 ng/mL). You might consider getting more sunlight or discussing supplements with your doctor.</p>
+                            <p>Overall, you're in good health! Is there a specific result you'd like me to explain in more detail?</p>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Function to send a message
+            function sendMessage() {
+                const messageText = chatInput.value.trim();
+                
+                if (!messageText) return;
+                
+                // Add user message
+                addMessage("user", messageText, true);
+                
+                // Clear input and reset height
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                updateSendButtonState();
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate AI thinking time (1-3 seconds)
+                const thinkingTime = Math.random() * 2000 + 1000;
+                
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    // Generate AI response based on user input
+                    const aiResponse = generateAIResponse(messageText);
+                    addMessage("AI", aiResponse, false);
+                }, thinkingTime);
+            }
+            
+            // Function to add a message to the chat
+            function addMessage(sender, content, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                
+                if (isUser) {
+                    messageDiv.classList.add('user-message', 'fade-in');
+                    messageDiv.innerHTML = `
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">${content}</div>
+                    `;
+                } else {
+                    messageDiv.classList.add('ai-message', 'slide-in-right');
+                    messageDiv.innerHTML = `
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">${content}</div>
+                    `;
+                }
+                
+                messagesContainer.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Function to generate AI responses based on user input
+            function generateAIResponse(userInput) {
+                const input = userInput.toLowerCase();
+                const t = translations[currentLang];
+                
+                // Check for keywords and respond accordingly
+                if (input.includes('cbc') || input.includes('blood test') || input.includes('hemoglobin') || input.includes('hgb') || 
+                    input.includes('रक्त') || input.includes('हीमोग्लोबिन') || input.includes('रक्तपेशी')) {
+                    return t.bloodTestResponse;
+                } else if (input.includes('cholesterol') || input.includes('lipid') || input.includes('कोलेस्ट्रॉल')) {
+                    return generateCholesterolResponse();
+                } else if (input.includes('diabetes') || input.includes('sugar') || input.includes('glucose') || input.includes('मधुमेह') || input.includes('शुगर')) {
+                    return generateDiabetesResponse();
+                } else if (input.includes('thyroid') || input.includes('tsh') || input.includes('थायराइड')) {
+                    return generateThyroidResponse();
+                } else if (input.includes('thank') || input.includes('thanks') || input.includes('धन्यवाद') || input.includes('धन्यवाद')) {
+                    if (currentLang === 'hi') {
+                        return `<p>आपका स्वागत है! मुझे खुशी है कि मैं मदद कर सका। यदि आपके स्वास्थ्य रिपोर्ट के बारे में कोई और प्रश्न हैं तो बेझिझक पूछें।</p>`;
+                    } else if (currentLang === 'mr') {
+                        return `<p>तुमचे स्वागत आहे! मला आनंद आहे की मी मदत करू शकलो. तुमच्या आरोग्य अहवालांबद्दल आणखी काही प्रश्न असल्यास विचारण्यास मोकळे वाटा.</p>`;
+                    } else {
+                        return `<p>You're welcome! I'm glad I could help. Feel free to ask if you have any other questions about your health reports.</p>`;
+                    }
+                } else if (input.includes('hello') || input.includes('hi') || input.includes('hey') || input.includes('नमस्ते') || input.includes('नमस्कार')) {
+                    return t.welcomeMessage;
+                } else {
+                    // Default response for unrecognized queries
+                    if (currentLang === 'hi') {
+                        return `
+                            <p>मैं मेडिकल रिपोर्ट और लैब परिणामों को समझने में आपकी मदद कर सकता हूँ। आप कर सकते हैं:</p>
+                            <ul style="padding-left: 20px; margin: 10px 0;">
+                                <li>विशिष्ट लैब वैल्यू के बारे में पूछना (जैसे हीमोग्लोबिन, कोलेस्ट्रॉल, TSH)</li>
+                                <li>विश्लेषण के लिए मेडिकल रिपोर्ट अपलोड करना</li>
+                                <li>सरल भाषा में मेडिकल शब्दों की व्याख्या प्राप्त करना</li>
+                            </ul>
+                            <p>आप किस स्वास्थ्य रिपोर्ट या लैब वैल्यू के बारे में जानना चाहेंगे?</p>
+                        `;
+                    } else if (currentLang === 'mr') {
+                        return `
+                            <p>मी वैद्यकीय अहवाल आणि प्रयोगशाळा परिणाम समजून घेण्यात तुमची मदत करू शकतो. तुम्ही करू शकता:</p>
+                            <ul style="padding-left: 20px; margin: 10px 0;">
+                                <li>विशिष्ट प्रयोगशाळा मूल्यांबद्दल विचारणे (जसे हिमोग्लोबिन, कोलेस्टेरॉल, TSH)</li>
+                                <li>विश्लेषणासाठी वैद्यकीय अहवाल अपलोड करणे</li>
+                                <li>सोप्या भाषेत वैद्यकीय संज्ञांचे स्पष्टीकरण मिळवणे</li>
+                            </ul>
+                            <p>तुम्हाला कोणत्या आरोग्य अहवालाबद्दल किंवा प्रयोगशाळा मूल्याबद्दल माहिती हवी आहे?</p>
+                        `;
+                    } else {
+                        return `
+                            <p>I can help you understand medical reports and lab results. You can:</p>
+                            <ul style="padding-left: 20px; margin: 10px 0;">
+                                <li>Ask about specific lab values (like hemoglobin, cholesterol, TSH)</li>
+                                <li>Upload a medical report for me to analyze</li>
+                                <li>Get explanations of medical terms in simple language</li>
+                            </ul>
+                            <p>What health report or lab value would you like me to explain?</p>
+                        `;
+                    }
+                }
+            }
+            
+            // Generate cholesterol response with medium severity
+            function generateCholesterolResponse() {
+                if (currentLang === 'hi') {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">कोलेस्ट्रॉल विश्लेषण</div>
+                                <div class="overall-status status-attention">
+                                    <i class="fas fa-exclamation-triangle"></i> ध्यान दें
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">कुल कोलेस्ट्रॉल</div>
+                                        <div class="parameter-value">245 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">LDL (बुरा)</div>
+                                        <div class="parameter-value">165 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">HDL (अच्छा)</div>
+                                        <div class="parameter-value">45 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-medium">
+                            <div class="severity-icon">⚠️</div>
+                            <div class="severity-text">कोलेस्ट्रॉल का स्तर सामान्य से अधिक है</div>
+                            <div class="severity-badge">मध्यम</div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <div class="recommendations-title">
+                                <i class="fas fa-lightbulb"></i> सुझाव
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-utensils" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>कम वसा वाला आहार लें</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-running" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>नियमित व्यायाम करें</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-user-md" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>3 महीने में डॉक्टर से मिलें</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (currentLang === 'mr') {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">कोलेस्टेरॉल विश्लेषण</div>
+                                <div class="overall-status status-attention">
+                                    <i class="fas fa-exclamation-triangle"></i> लक्ष द्या
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">एकूण कोलेस्टेरॉल</div>
+                                        <div class="parameter-value">245 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">LDL (वाईट)</div>
+                                        <div class="parameter-value">165 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">HDL (चांगले)</div>
+                                        <div class="parameter-value">45 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-medium">
+                            <div class="severity-icon">⚠️</div>
+                            <div class="severity-text">कोलेस्टेरॉलची पातळी सामान्यपेक्षा जास्त आहे</div>
+                            <div class="severity-badge">मध्यम</div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <div class="recommendations-title">
+                                <i class="fas fa-lightbulb"></i> शिफारसी
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-utensils" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>कमी चरबीयुक्त आहार घ्या</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-running" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>नियमित व्यायाम करा</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-user-md" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>3 महिन्यांत डॉक्टरांना भेटा</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">Cholesterol Analysis</div>
+                                <div class="overall-status status-attention">
+                                    <i class="fas fa-exclamation-triangle"></i> Needs Attention
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">Total Cholesterol</div>
+                                        <div class="parameter-value">245 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">LDL (Bad)</div>
+                                        <div class="parameter-value">165 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-yellow"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">HDL (Good)</div>
+                                        <div class="parameter-value">45 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-medium">
+                            <div class="severity-icon">⚠️</div>
+                            <div class="severity-text">Cholesterol levels are above normal range</div>
+                            <div class="severity-badge">Medium</div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <div class="recommendations-title">
+                                <i class="fas fa-lightbulb"></i> Recommendations
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-utensils" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>Follow a low-fat diet</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-running" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>Exercise regularly (30 min/day)</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-user-md" style="color: #ea8600; margin-top: 2px;"></i>
+                                <span>Follow up with doctor in 3 months</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Generate diabetes response with serious severity
+            function generateDiabetesResponse() {
+                if (currentLang === 'hi') {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">मधुमेह विश्लेषण</div>
+                                <div class="overall-status status-concern">
+                                    <i class="fas fa-exclamation-circle"></i> गंभीर
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">फास्टिंग ग्लूकोज</div>
+                                        <div class="parameter-value">165 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-red"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">HbA1c</div>
+                                        <div class="parameter-value">8.2%</div>
+                                    </div>
+                                    <div class="parameter-status status-red"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-serious">
+                            <div class="severity-icon">🚨</div>
+                            <div class="severity-text">मधुमेह का स्तर खतरनाक रूप से उच्च है</div>
+                            <div class="severity-badge">गंभीर</div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <div class="recommendations-title">
+                                <i class="fas fa-exclamation-triangle"></i> तत्काल कार्रवाई आवश्यक
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-user-md" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>तुरंत डॉक्टर से संपर्क करें</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-pills" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>दवा की समीक्षा आवश्यक</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-chart-line" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>दैनिक ग्लूकोज मॉनिटरिंग</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">Diabetes Analysis</div>
+                                <div class="overall-status status-concern">
+                                    <i class="fas fa-exclamation-circle"></i> Serious
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">Fasting Glucose</div>
+                                        <div class="parameter-value">165 mg/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-red"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">HbA1c</div>
+                                        <div class="parameter-value">8.2%</div>
+                                    </div>
+                                    <div class="parameter-status status-red"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-serious">
+                            <div class="severity-icon">🚨</div>
+                            <div class="severity-text">Diabetes levels are dangerously high</div>
+                            <div class="severity-badge">Serious</div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <div class="recommendations-title">
+                                <i class="fas fa-exclamation-triangle"></i> Immediate Action Required
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-user-md" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>Contact your doctor immediately</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-pills" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>Medication review needed</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <i class="fas fa-chart-line" style="color: #d93025; margin-top: 2px;"></i>
+                                <span>Daily glucose monitoring required</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Generate thyroid response with normal severity
+            function generateThyroidResponse() {
+                if (currentLang === 'hi') {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">थायराइड विश्लेषण</div>
+                                <div class="overall-status status-good">
+                                    <i class="fas fa-thumbs-up"></i> अच्छा
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">TSH</div>
+                                        <div class="parameter-value">2.1 mIU/L</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">T4 (Free)</div>
+                                        <div class="parameter-value">1.3 ng/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-normal">
+                            <div class="severity-icon">✅</div>
+                            <div class="severity-text">थायराइड फंक्शन सामान्य है</div>
+                            <div class="severity-badge">सामान्य</div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="health-summary">
+                            <div class="summary-header">
+                                <div class="summary-title">Thyroid Analysis</div>
+                                <div class="overall-status status-good">
+                                    <i class="fas fa-thumbs-up"></i> Good
+                                </div>
+                            </div>
+                            
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">TSH</div>
+                                        <div class="parameter-value">2.1 mIU/L</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-info">
+                                        <div class="parameter-label">T4 (Free)</div>
+                                        <div class="parameter-value">1.3 ng/dL</div>
+                                    </div>
+                                    <div class="parameter-status status-green"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-severity severity-normal">
+                            <div class="severity-icon">✅</div>
+                            <div class="severity-text">Thyroid function is normal</div>
+                            <div class="severity-badge">Normal</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Function to show notifications
+            function showNotification(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: #7c3aed;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    font-weight: 500;
+                    max-width: 300px;
+                    animation: fadeIn 0.3s ease-out;
+                `;
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(20px)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Initialize with blood test conversation
+            loadBloodTestConversation();
+        });
+    </script>
+</body>
+</html>
