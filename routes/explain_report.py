@@ -1,21 +1,45 @@
+<<<<<<< HEAD
+=======
+# routes/explain_report.py
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
 import os
 import datetime
 import logging
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 
+<<<<<<< HEAD
 logger = logging.getLogger(__name__)
 
 explain_bp = Blueprint('explain_bp', __name__)
 
+=======
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# First define the blueprint
+explain_bp = Blueprint('explain_bp', __name__)
+
+# Configure upload folder
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+<<<<<<< HEAD
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'txt'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+=======
+# Allowed file extensions
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'txt'}
+
+# Helper function to check allowed file types
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# ---------------- MEDICAL SIGNAL HIGHLIGHTING ----------------
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
 def add_medical_signals(ai_text):
     """
     Adds visual indicators to medical values based on keywords
@@ -39,6 +63,10 @@ def add_medical_signals(ai_text):
     return "\n".join(highlighted_lines)
 
 
+<<<<<<< HEAD
+=======
+# Try to import services
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
 try:
     from services.gemini_service import generate_explanation
     from services.ocr_service import extract_text_from_file
@@ -48,6 +76,10 @@ except ImportError as e:
     logger.error(f"❌ Failed to import services: {str(e)}")
     SERVICES_AVAILABLE = False
     
+<<<<<<< HEAD
+=======
+    # Create dummy functions so the app starts
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     def generate_explanation(report_text, language):
         return f"Service unavailable. Please check if services are installed. Error: {str(e)}"
     
@@ -68,6 +100,10 @@ def explain_report():
     language = "en"
     report_text = ""
 
+<<<<<<< HEAD
+=======
+    # --- FILE UPLOAD ---
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     if 'image' in request.files:
         image = request.files["image"]
         if image.filename == '':
@@ -78,24 +114,43 @@ def explain_report():
         
         language = request.form.get("language", "en")
         
+<<<<<<< HEAD
+=======
+        # Save file temporarily
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
         filename = secure_filename(image.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         image.save(file_path)
         
         logger.info(f"📁 Processing file: {filename}")
         
+<<<<<<< HEAD
         report_text = extract_text_from_file(file_path, filename)
         
+=======
+        # Extract text using OCR service
+        report_text = extract_text_from_file(file_path, filename)
+        
+        # Clean up temporary file
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
         try:
             os.remove(file_path)
             logger.info(f"🗑️ Removed temporary file: {file_path}")
         except:
             pass
         
+<<<<<<< HEAD
+=======
+        # Check if we got valid text
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
         if not report_text or len(report_text.strip()) < 10:
             logger.error("❌ No readable text found in file")
             return jsonify({"error": "No readable text found in file. Try uploading a clearer image or PDF."}), 400
 
+<<<<<<< HEAD
+=======
+    # --- JSON DATA ---
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     elif request.is_json:
         data = request.get_json()
         report_text = data.get("reportText", "") or data.get("message", "")
@@ -103,6 +158,10 @@ def explain_report():
         if not report_text or len(report_text.strip()) < 10:
             return jsonify({"error": "Valid report text required (minimum 10 characters)"}), 400
 
+<<<<<<< HEAD
+=======
+    # --- FORM DATA ---
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     elif request.form:
         report_text = request.form.get("reportText", "")
         language = request.form.get("language", "en")
@@ -111,12 +170,20 @@ def explain_report():
     else:
         return jsonify({"error": "No data received"}), 400
 
+<<<<<<< HEAD
+=======
+    # --- GEMINI PROCESSING ---
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     try:
         logger.info(f"🤖 Processing {len(report_text)} characters in {language}")
         
         explanation = generate_explanation(report_text, language)
         
 
+<<<<<<< HEAD
+=======
+        # --- Save explanation as Markdown file ---
+>>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         md_filename = f"explanation_{timestamp}.md"
         md_path = os.path.join(UPLOAD_FOLDER, md_filename)
