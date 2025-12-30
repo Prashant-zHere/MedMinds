@@ -239,7 +239,19 @@
         
         let currentLang = 'en';
         
-        document.addEventListener('DOMContentLoaded', function() {
+        // Immediate initialization (before DOMContentLoaded for faster loading)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            // DOM is already loaded
+            initializePage();
+        }
+        
+        function initializePage() {
+            // Clear any cached conversation state on page load
+            sessionStorage.removeItem('activeConversation');
+            localStorage.removeItem('lastConversation');
+            
             const landingPage = document.getElementById('landingPage');
             const chatInterface = document.getElementById('chatInterface');
             const getStartedButtons = document.querySelectorAll('.get-started-btn, #landingGetStartedBtn, #mainGetStartedBtn');
@@ -256,6 +268,87 @@
             const inputHint = document.getElementById('inputHint');
             const typingText = document.getElementById('typingText');
             const fileInput = document.getElementById('fileInput');
+            
+            // Mobile menu functionality
+            const sidebar = document.querySelector('.sidebar');
+            let mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            let sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            // Mobile menu toggle functionality
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                    sidebarOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            // Close sidebar when clicking overlay
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            // Close sidebar when clicking on conversation items (mobile)
+            conversationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    conversationItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Load conversation based on which item was clicked
+                    const conversationText = this.textContent.trim();
+                    
+                    if (conversationText.includes('Blood test')) {
+                        loadBloodTestConversation();
+                    } else if (conversationText.includes('Thyroid')) {
+                        loadThyroidConversation();
+                    } else if (conversationText.includes('Annual')) {
+                        loadAnnualCheckupConversation();
+                    }
+                    
+                    // Close mobile menu if on mobile
+                    if (window.innerWidth <= 640) {
+                        sidebar.classList.remove('active');
+                        sidebarOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // Close sidebar when clicking back or new chat buttons (mobile)
+            [newChatBtn, document.getElementById('backToHomeBtn')].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        if (window.innerWidth <= 640) {
+                            sidebar.classList.remove('active');
+                            sidebarOverlay.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 640) {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Prevent body scroll when sidebar is open
+            document.addEventListener('touchmove', function(e) {
+                if (sidebar.classList.contains('active') && !sidebar.contains(e.target)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
             
             // Language selector functionality
             languageBtn.addEventListener('click', function(e) {
@@ -401,26 +494,8 @@ fileInput.addEventListener('change', async function(e) {
             
             // New conversation button
             newChatBtn.addEventListener('click', function() {
-                // Clear active state from all conversations
-                conversationItems.forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                // Clear chat messages and show welcome message in selected language
-                const t = translations[currentLang];
-                messagesContainer.innerHTML = `
-                    <div class="message ai-message fade-in">
-                        <div class="avatar ai-avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content">
-                            ${t.welcomeMessage}
-                        </div>
-                    </div>
-                `;
-                
-                // Scroll to bottom
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                // Initialize new conversation
+                initializeNewConversation();
                 
                 // Show notification in selected language
                 const notificationText = currentLang === 'hi' ? "नई बातचीत शुरू करने के लिए एक रिपोर्ट अपलोड करें या प्रश्न पूछें।" :
@@ -452,28 +527,6 @@ fileInput.addEventListener('change', async function(e) {
             function hideTypingIndicator() {
                 typingIndicator.style.display = 'none';
             }
-            
-            // Conversation items click
-            conversationItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remove active class from all items
-                    conversationItems.forEach(i => i.classList.remove('active'));
-                    
-                    // Add active class to clicked item
-                    this.classList.add('active');
-                    
-                    // Load conversation based on which item was clicked
-                    const conversationText = this.textContent.trim();
-                    
-                    if (conversationText.includes('Blood test')) {
-                        loadBloodTestConversation();
-                    } else if (conversationText.includes('Thyroid')) {
-                        loadThyroidConversation();
-                    } else if (conversationText.includes('Annual')) {
-                        loadAnnualCheckupConversation();
-                    }
-                });
-            });
             
             // Load the blood test conversation (default)
             function loadBloodTestConversation() {
@@ -1067,8 +1120,57 @@ function generateAIResponse(userInput) {
                 }, 3000);
             }
             
-            // Initialize with blood test conversation
-            loadBloodTestConversation();
+            // Initialize with welcome message for new conversation
+            function initializeNewConversation() {
+                const t = translations[currentLang];
+                if (messagesContainer) {
+                    messagesContainer.innerHTML = `
+                        <div class="message ai-message fade-in">
+                            <div class="avatar ai-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                ${t.welcomeMessage}
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Remove active state from all conversation items
+                    conversationItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            }
+            
+            // Always initialize with welcome message when page loads
+            initializeNewConversation();
+        }
+        
+        // Also ensure initialization on window load (backup)
+        window.addEventListener('load', function() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            if (messagesContainer && messagesContainer.children.length === 0) {
+                // If messages container is empty, initialize with welcome message
+                const t = translations[currentLang] || translations['en'];
+                messagesContainer.innerHTML = `
+                    <div class="message ai-message fade-in">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            ${t.welcomeMessage}
+                        </div>
+                    </div>
+                `;
+                
+                // Remove active state from all conversation items
+                document.querySelectorAll('.conversation-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+            }
         });
         
 const backToHomeBtn = document.getElementById('backToHomeBtn');

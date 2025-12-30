@@ -874,6 +874,15 @@ body {
     .input-container {
         padding: 25px 30px;
     }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .message-content {
+        padding: 22px;
+        font-size: 15px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -883,29 +892,23 @@ body {
     }
     
     .chat-wrapper {
-        flex-direction: column;
+        flex-direction: row; /* Keep sidebar visible on tablet */
     }
     
     .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: 250px;
-        overflow-y: auto;
-        transform: translateY(0);
-        padding: 20px 15px;
-        border-right: none;
-        border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+        width: 250px;
+        padding: 15px 12px;
         animation: mobileSidebarSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     @keyframes mobileSidebarSlide {
         from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateX(-20px);
         }
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
         }
     }
     
@@ -914,17 +917,27 @@ body {
         padding-bottom: 15px;
     }
     
-    .new-chat-btn {
-        margin-bottom: 20px;
+    .sidebar-title {
+        font-size: 20px;
+    }
+    
+    .new-chat-btn, .back-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        margin-bottom: 15px;
     }
     
     .conversations-section {
         margin-bottom: 20px;
     }
     
+    .conversation-item {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+    
     .chat-area {
         flex: 1;
-        min-height: calc(100vh - 250px);
     }
     
     .chat-header {
@@ -954,6 +967,15 @@ body {
     .message-content {
         padding: 20px;
         font-size: 15px;
+    }
+    
+    .parameter-highlight {
+        padding: 20px;
+        margin: 15px 0;
+    }
+    
+    .parameter-name {
+        font-size: 18px;
     }
     
     .input-container {
@@ -987,24 +1009,83 @@ body {
         right: auto;
         left: 0;
     }
+}
+
+/* Mobile Portrait - Sidebar becomes overlay */
+@media (max-width: 640px) {
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     
-    .back-btn, .new-chat-btn {
-        padding: 14px 16px;
-        font-size: 14px;
+    .chat-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        height: 100%;
+        z-index: 1000;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: none;
+        border-radius: 0 20px 20px 0;
+        box-shadow: 10px 0 50px rgba(0, 0, 0, 0.2);
+        border-right: none;
+        padding: 20px 15px;
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .chat-area {
+        width: 100%;
+        height: 100vh;
+    }
+    
+    .chat-header {
+        padding: 15px 20px 15px 80px; /* Space for mobile menu button */
+    }
+    
+    .chat-title {
+        font-size: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .sidebar {
-        max-height: 220px;
+        width: 90%;
+        padding: 15px 12px;
     }
     
     .sidebar-title {
-        font-size: 20px;
+        font-size: 18px;
+    }
+    
+    .new-chat-btn, .back-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .conversation-item {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+    
+    .mobile-menu-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+        top: 15px;
+        left: 15px;
     }
     
     .chat-header {
-        padding: 12px 15px;
+        padding: 12px 15px 12px 70px;
     }
     
     .chat-title {
@@ -1033,6 +1114,20 @@ body {
         border-radius: 20px;
     }
     
+    .parameter-highlight {
+        padding: 16px;
+        margin: 12px 0;
+    }
+    
+    .parameter-name {
+        font-size: 16px;
+    }
+    
+    .normal-range, .abnormal-range {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
     .input-container {
         padding: 15px;
     }
@@ -1040,6 +1135,7 @@ body {
     .input-wrapper {
         padding: 10px 15px;
         border-radius: 20px;
+        min-height: 55px;
     }
     
     .chat-input {
@@ -1048,26 +1144,40 @@ body {
     }
     
     .attach-btn {
-        width: 45px;
-        height: 45px;
-        padding: 12px;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        font-size: 16px;
     }
     
     .send-btn {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .parameter-highlight {
-        padding: 20px;
-    }
-    
-    .parameter-name {
+        width: 45px;
+        height: 45px;
         font-size: 18px;
+    }
+    
+    .input-hint {
+        font-size: 11px;
+    }
+    
+    .language-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+        min-width: 120px;
+    }
+    
+    .language-option {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+    
+    .typing-indicator {
+        padding: 15px 20px;
+        font-size: 14px;
     }
 }
 
-/* Hide sidebar toggle for mobile (optional enhancement) */
+/* Mobile Menu Toggle */
 .mobile-menu-toggle {
     display: none;
     position: fixed;
@@ -1084,52 +1194,127 @@ body {
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
     transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-menu-toggle:hover {
+    background: #6d28d9;
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(124, 58, 237, 0.4);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+    animation: overlayFadeIn 0.3s ease;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @media (max-width: 768px) {
+    .conversation-item,
+    .back-btn,
+    .new-chat-btn,
+    .attach-btn,
+    .send-btn,
+    .language-btn,
+    .language-option {
+        -webkit-tap-highlight-color: rgba(124, 58, 237, 0.1);
+        min-height: 44px; /* iOS recommended touch target size */
+    }
+    
     .mobile-menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    /* Improve scrolling on mobile */
+    .messages-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
     
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 85%;
-        height: 100%;
-        z-index: 1000;
-        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        max-height: none;
-        border-radius: 0 20px 20px 0;
-        box-shadow: 10px 0 50px rgba(0, 0, 0, 0.2);
+        -webkit-overflow-scrolling: touch;
     }
     
-    .sidebar.active {
-        left: 0;
+    /* Prevent zoom on input focus */
+    .chat-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Landscape mobile optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+    .sidebar {
+        width: 300px;
     }
     
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        backdrop-filter: blur(5px);
+    .chat-header {
+        padding: 10px 20px 10px 80px;
     }
     
-    .sidebar-overlay.active {
-        display: block;
-        animation: overlayFadeIn 0.3s ease;
+    .messages-container {
+        padding: 15px 20px;
     }
     
-    @keyframes overlayFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+    .input-container {
+        padding: 15px 20px;
+    }
+    
+    .input-wrapper {
+        min-height: 50px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .avatar,
+    .feature-icon,
+    .step-number {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .floating-element,
+    .avatar,
+    .typing-dot {
+        animation: none !important;
     }
 }
 
@@ -1168,4 +1353,193 @@ body {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
     20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Additional mobile-specific styles for better UX */
+@media (max-width: 640px) {
+    /* Ensure proper spacing for mobile menu button */
+    .chat-area {
+        padding-top: 0;
+    }
+    
+    /* Improve message readability on small screens */
+    .message-content p {
+        margin-bottom: 12px;
+    }
+    
+    .message-content ul, .message-content ol {
+        padding-left: 16px;
+        margin: 10px 0;
+    }
+    
+    .message-content li {
+        margin-bottom: 6px;
+    }
+    
+    /* Better parameter highlight styling for mobile */
+    .parameter-highlight {
+        border-radius: 12px;
+        border-left-width: 4px;
+    }
+    
+    .parameter-name::before {
+        font-size: 20px;
+    }
+    
+    /* Improve button spacing */
+    .back-btn, .new-chat-btn {
+        margin-bottom: 12px;
+    }
+    
+    /* Better conversation item styling */
+    .conversation-item {
+        border-radius: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .conversation-item i {
+        font-size: 16px;
+    }
+}
+
+/* Very small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .sidebar {
+        width: 95%;
+    }
+    
+    .mobile-menu-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        top: 12px;
+        left: 12px;
+    }
+    
+    .chat-header {
+        padding: 10px 12px 10px 60px;
+    }
+    
+    .chat-title {
+        font-size: 16px;
+    }
+    
+    .messages-container {
+        padding: 12px;
+    }
+    
+    .message-content {
+        padding: 14px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    .parameter-highlight {
+        padding: 14px;
+        margin: 10px 0;
+    }
+    
+    .parameter-name {
+        font-size: 15px;
+    }
+    
+    .normal-range, .abnormal-range {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+    
+    .input-container {
+        padding: 12px;
+    }
+    
+    .input-wrapper {
+        padding: 8px 12px;
+        min-height: 50px;
+    }
+    
+    .attach-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+    
+    .send-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .chat-input {
+        font-size: 14px;
+        padding: 8px 4px;
+    }
+    
+    .language-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 100px;
+    }
+    
+    .input-hint {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+}
+
+/* Improve focus states for mobile */
+@media (hover: none) and (pointer: coarse) {
+    .chat-input:focus {
+        outline: 2px solid #7c3aed;
+        outline-offset: 2px;
+    }
+    
+    .attach-btn:focus,
+    .send-btn:focus,
+    .language-btn:focus {
+        outline: 2px solid #7c3aed;
+        outline-offset: 2px;
+    }
+    
+    /* Improve button press feedback */
+    .conversation-item:active,
+    .back-btn:active,
+    .new-chat-btn:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .attach-btn:active,
+    .send-btn:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* Dark mode support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+    /* This can be expanded later for dark mode support */
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .input-container,
+    .mobile-menu-toggle,
+    .sidebar-overlay {
+        display: none !important;
+    }
+    
+    .chat-area {
+        width: 100% !important;
+    }
+    
+    .messages-container {
+        padding: 20px !important;
+    }
+    
+    .message-content {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+    }
 }

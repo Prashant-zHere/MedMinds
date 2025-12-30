@@ -11,6 +11,14 @@
 </head>
 
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
     <div class="chat-container" id="chatInterface">
         <div class="chat-wrapper">
             <aside class="sidebar">
@@ -23,14 +31,14 @@
                     <i class="fas fa-arrow-left"></i> Back to Home
                 </button>
 
-                <button class="new-chat-btn" id="newChatBtn">
+                <button class="new-chat-btn active" id="newChatBtn">
                     <i class="fas fa-plus"></i> New conversation
                 </button>
 
                 <div class="conversations-section">
                     <div class="section-title">Recent conversations</div>
                     <ul class="conversation-list">
-                        <li class="conversation-item active">
+                        <li class="conversation-item">
                             <i class="fas fa-file-medical"></i> Blood test – Dec 27
                         </li>
                         <li class="conversation-item">
@@ -49,34 +57,7 @@
                 </header>
 
                 <div class="messages-container" id="messagesContainer">
-                    <div class="message user-message fade-in">
-                        <div class="avatar user-avatar">Y</div>
-                        <div class="message-content">
-                            Please explain my CBC report
-                        </div>
-                    </div>
-
-                    <div class="message ai-message slide-in-right">
-                        <div class="avatar ai-avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content">
-                            <p>Of course! Let's start with your <strong>Hemoglobin (HGB)</strong> value.</p>
-
-                            <div class="parameter-highlight">
-                                <div class="parameter-name">Hemoglobin (HGB)</div>
-                                <p>This is the oxygen-carrying protein in your blood cells. Think of hemoglobin as a bus
-                                    that transports oxygen throughout your body.</p>
-                                <div class="normal-range">Normal range for adults: 12.0 to 17.5 grams per deciliter
-                                    (g/dL)</div>
-                            </div>
-
-                            <p>Your HGB value appears to be within the normal range, which means your blood is
-                                effectively carrying oxygen to your organs and tissues.</p>
-                            <p>Would you like me to explain any other values from your CBC report, such as WBC (white
-                                blood cells), RBC (red blood cells), or platelets?</p>
-                        </div>
-                    </div>
+                    <!-- Messages will be dynamically loaded by JavaScript -->
                 </div>
 
                 <div class="input-container">
