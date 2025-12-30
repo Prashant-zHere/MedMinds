@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMinds.AI | Your Medical AI Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+
+<body>
+    <!-- Chat Interface -->
+    <div class="chat-container" id="chatInterface">
+        <div class="chat-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-brain" style="color: #7c3aed; font-size: 22px;"></i>
+                    <div class="sidebar-title">MedMinds.AI</div>
+                </div>
+
+                <button class="back-btn" id="backToHomeBtn">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </button>
+
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i> New conversation
+                </button>
+
+                <div class="conversations-section">
+                    <div class="section-title">Recent conversations</div>
+                    <ul class="conversation-list">
+                        <li class="conversation-item active">
+                            <i class="fas fa-file-medical"></i> Blood test – Dec 27
+                        </li>
+                        <li class="conversation-item">
+                            <i class="fas fa-file-medical"></i> Thyroid report
+                        </li>
+                        <li class="conversation-item">
+                            <i class="fas fa-file-medical"></i> Annual check-up
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Main Chat Area -->
+            <main class="chat-area">
+                <header class="chat-header">
+                    <div class="chat-title">MedMinds.<span>AI</span> Assistant</div>
+                </header>
+
+                <div class="messages-container" id="messagesContainer">
+                    <!-- User Message -->
+                    <div class="message user-message fade-in">
+                        <div class="avatar user-avatar">Y</div>
+                        <div class="message-content">
+                            Please explain my CBC report
+                        </div>
+                    </div>
+
+                    <!-- AI Response -->
+                    <div class="message ai-message slide-in-right">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Of course! Let's start with your <strong>Hemoglobin (HGB)</strong> value.</p>
+
+                            <div class="parameter-highlight">
+                                <div class="parameter-name">Hemoglobin (HGB)</div>
+                                <p>This is the oxygen-carrying protein in your blood cells. Think of hemoglobin as a bus
+                                    that transports oxygen throughout your body.</p>
+                                <div class="normal-range">Normal range for adults: 12.0 to 17.5 grams per deciliter
+                                    (g/dL)</div>
+                            </div>
+
+                            <p>Your HGB value appears to be within the normal range, which means your blood is
+                                effectively carrying oxygen to your organs and tissues.</p>
+                            <p>Would you like me to explain any other values from your CBC report, such as WBC (white
+                                blood cells), RBC (red blood cells), or platelets?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <div class="input-actions">
+                            <button class="attach-btn" id="attachBtn" title="Attach file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                        </div>
+                        <textarea class="chat-input" id="chatInput" placeholder="Message MedMinds.AI..."
+                            rows="1"></textarea>
+                        <button class="send-btn" id="sendMessageBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="input-bottom">
+                        <div class="input-hint" id="inputHint">
+                            Disclaimer: This explanation is for general awareness only and should not be considered a
+                            medical diagnosis or a substitute for professional medical advice.
+                        </div>
+                        <div class="language-selector">
+                            <button class="language-btn" id="languageBtn">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLanguage">English</span>
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                            <div class="language-dropdown" id="languageDropdown">
+                                <div class="language-option active" data-lang="en" data-name="English">
+                                    🇺🇸 English
+                                </div>
+                                <div class="language-option" data-lang="hi" data-name="हिंदी">
+                                    🇮🇳 हिंदी (Hindi)
+                                </div>
+                                <div class="language-option" data-lang="mr" data-name="मराठी">
+                                    🇮🇳 मराठी (Marathi)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span id="typingText">MedMinds.AI is typing</span>
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Hidden file input for actual upload -->
+    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display: none;" />
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+
+</html>
