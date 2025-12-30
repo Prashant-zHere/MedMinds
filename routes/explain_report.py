@@ -1,77 +1,30 @@
-# routes/explain_report.py
 import os
 import datetime
 import logging
-from flask import Blueprint, request, jsonify, send_file
-from werkzeug.utils import secure_filename
+from flask import Blueprint, request, jsonify
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
-# First define the blueprint
 explain_bp = Blueprint('explain_bp', __name__)
 
-<<<<<<< HEAD
-=======
-# Configure upload folder
-UPLOAD_FOLDER = 'uploads'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+ALLOWED_EXTENSIONS = {'pdf'}
 
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
-# Allowed file extensions
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'txt'}
-
-# Helper function to check allowed file types
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-# ---------------- MEDICAL SIGNAL HIGHLIGHTING ----------------
-def add_medical_signals(ai_text):
-    """
-    Adds visual indicators to medical values based on keywords
-    """
-    highlighted_lines = []
 
-    for line in ai_text.splitlines():
-        upper = line.upper()
-
-        if "CRITICAL" in upper:
-            highlighted_lines.append(f"🚨 **{line}**")
-        elif "HIGH" in upper:
-            highlighted_lines.append(f"🔴 **{line}**")
-        elif "LOW" in upper:
-            highlighted_lines.append(f"🟡 **{line}**")
-        elif "NORMAL" in upper:
-            highlighted_lines.append(f"🟢 {line}")
-        else:
-            highlighted_lines.append(line)
-
-    return "\n".join(highlighted_lines)
-
-
-# Try to import services
 try:
     from services.gemini_service import generate_explanation
-<<<<<<< HEAD
     from services.ocr_service import extract_text_from_file_stream
-=======
-    from services.ocr_service import extract_text_from_file
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
     SERVICES_AVAILABLE = True
     logger.info("✅ Services imported successfully")
 except ImportError as e:
     logger.error(f"❌ Failed to import services: {str(e)}")
     SERVICES_AVAILABLE = False
     
-    # Create dummy functions so the app starts
     def generate_explanation(report_text, language):
         return f"Service unavailable. Please check if services are installed. Error: {str(e)}"
     
-<<<<<<< HEAD
     def extract_text_from_file_stream(file_stream, filename):
-=======
-    def extract_text_from_file(file_path, filename):
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
         return f"OCR service unavailable. Please check installation. Error: {str(e)}"
 
 @explain_bp.route("/api/explain-report", methods=["POST"])
@@ -87,148 +40,72 @@ def explain_report():
     
     language = "en"
     report_text = ""
+    pdf_text = ""
+    user_text = ""
 
-    # --- FILE UPLOAD ---
+    if request.is_json:
+        data = request.get_json()
+        user_text = data.get("reportText", "") or data.get("message", "")
+        language = data.get("language", "en")
+    elif request.form:
+        user_text = request.form.get("reportText", "")
+        language = request.form.get("language", "en")
+
     if 'image' in request.files:
         image = request.files["image"]
-        if image.filename == '':
-            return jsonify({"error": "No file selected"}), 400
-        if not allowed_file(image.filename):
-            allowed = ", ".join(ALLOWED_EXTENSIONS)
-            return jsonify({"error": f"File type not allowed. Allowed: {allowed}"}), 400
-        
-        language = request.form.get("language", "en")
-        
-<<<<<<< HEAD
-        logger.info(f"📁 Processing file: {image.filename}")
-        
-        # Extract text using OCR service (in memory, no file saving)
-        report_text = extract_text_from_file_stream(image.stream, image.filename)
-=======
-        # Save file temporarily
-        filename = secure_filename(image.filename)
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
-        image.save(file_path)
-        
-        logger.info(f"📁 Processing file: {filename}")
-        
-        # Extract text using OCR service
-        report_text = extract_text_from_file(file_path, filename)
-        
-        # Clean up temporary file
-        try:
-            os.remove(file_path)
-            logger.info(f"🗑️ Removed temporary file: {file_path}")
-        except:
-            pass
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
-        
-        # Check if we got valid text
-        if not report_text or len(report_text.strip()) < 10:
-            logger.error("❌ No readable text found in file")
-            return jsonify({"error": "No readable text found in file. Try uploading a clearer image or PDF."}), 400
+        if image.filename != '':
+            if not allowed_file(image.filename):
+                return jsonify({"error": "File type not allowed. Only PDF files are supported."}), 400
+            
+            language = request.form.get("language", "en")
+            logger.info(f"📁 Processing PDF file: {image.filename}")
+            
+            pdf_text = extract_text_from_file_stream(image.stream, image.filename)
+            
+            if not pdf_text:
+                logger.error("❌ No readable text found in PDF file")
+                return jsonify({"error": "No readable text found in PDF file. Try uploading a clearer PDF."}), 400
 
-    # --- JSON DATA ---
-    elif request.is_json:
-        data = request.get_json()
-        report_text = data.get("reportText", "") or data.get("message", "")
-        language = data.get("language", "en")
-        if not report_text or len(report_text.strip()) < 10:
-            return jsonify({"error": "Valid report text required (minimum 10 characters)"}), 400
-
-    # --- FORM DATA ---
-    elif request.form:
-        report_text = request.form.get("reportText", "")
-        language = request.form.get("language", "en")
-        if not report_text or len(report_text.strip()) < 10:
-            return jsonify({"error": "Valid report text required (minimum 10 characters)"}), 400
+    if pdf_text and user_text:
+        report_text = f"User Input:\n{user_text}\n\nPDF Content:\n{pdf_text}"
+        logger.info(f"📝 Combined user text ({len(user_text)} chars) and PDF text ({len(pdf_text)} chars)")
+    elif pdf_text:
+        report_text = pdf_text
+        logger.info(f"📄 Using PDF text only ({len(pdf_text)} chars)")
+    elif user_text:
+        report_text = user_text
+        logger.info(f"✏️ Using user text only ({len(user_text)} chars) - skipping extraction")
     else:
-        return jsonify({"error": "No data received"}), 400
+        return jsonify({"error": "No data received. Please provide text input or upload a PDF file."}), 400
 
-    # --- GEMINI PROCESSING ---
+    if len(report_text.strip()) < 10:
+        return jsonify({"error": "Valid report text required (minimum 10 characters)"}), 400
+
     try:
         logger.info(f"🤖 Processing {len(report_text)} characters in {language}")
         
         explanation = generate_explanation(report_text, language)
         
-<<<<<<< HEAD
-        # Create markdown content for response (not saved to disk)
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-=======
-
-        # --- Save explanation as Markdown file ---
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        md_filename = f"explanation_{timestamp}.md"
-        md_path = os.path.join(UPLOAD_FOLDER, md_filename)
-
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
-        md_content = f"""# Report Explanation
-
-**Language:** {language}  
-**Text Length:** {len(report_text)} characters  
-**Source:** {"file" if 'image' in request.files else "text"}  
-**Generated:** {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
-
----
-
-## Original Text (first 1000 characters)
-
-{report_text[:1000]}...
-
----
-
-## AI Explanation
-
-{explanation}
-"""
-<<<<<<< HEAD
-
         logger.info("✅ Analysis completed successfully")
 
-        # --- Return response to frontend ---
         return jsonify({
-=======
-        with open(md_path, "w", encoding="utf-8") as f:
-            f.write(md_content)
-
-        logger.info(f"💾 Markdown file saved: {md_path}")
-
-        # --- Return response to frontend ---
-        return jsonify({
-            "md_file": md_filename,
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
-            "md_content": md_content,
             "explanation": explanation,
             "language": language,
             "status": "success",
-            "message": "Analysis completed successfully"
+            "message": "Analysis completed successfully",
+            "input_sources": {
+                "has_pdf": bool(pdf_text),
+                "has_text": bool(user_text),
+                "total_length": len(report_text)
+            }
         })
 
     except Exception as e:
         logger.error(f"❌ Gemini processing failed: {str(e)}")
         return jsonify({"error": f"AI processing failed: {str(e)}"}), 500
 
-@explain_bp.route("/api/download/<filename>", methods=["GET"])
-def download_file(filename):
-<<<<<<< HEAD
-    """Download endpoint - disabled since files are not saved"""
-    return jsonify({"error": "File downloads are not available. Files are processed in memory only."}), 404
-=======
-    """Download generated markdown files"""
-    try:
-        file_path = os.path.join(UPLOAD_FOLDER, secure_filename(filename))
-        if not os.path.exists(file_path):
-            return jsonify({"error": "File not found"}), 404
-        
-        return send_file(file_path, as_attachment=True)
-    except Exception as e:
-        logger.error(f"❌ Download error: {str(e)}")
-        return jsonify({"error": str(e)}), 500
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
-
 @explain_bp.route("/api/health", methods=["GET"])
 def health_check():
-    """Health check endpoint"""
     return jsonify({
         "status": "healthy" if SERVICES_AVAILABLE else "services_unavailable",
         "service": "MedMinds.AI",
@@ -236,10 +113,6 @@ def health_check():
         "timestamp": datetime.datetime.now().isoformat(),
         "endpoints": {
             "POST /api/explain-report": "Analyze medical reports",
-<<<<<<< HEAD
-=======
-            "GET /api/download/<filename>": "Download files",
->>>>>>> 91d12b0abd46f712f7a01e62d9ef7d42b8ba183b
             "GET /api/health": "Health check"
         }
     })
