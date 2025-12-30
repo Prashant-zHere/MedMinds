@@ -1,136 +1,136 @@
-🧠 MedMinds.AI
-Breaking Medical Language Barriers with Artificial Intelligence
-🏥 Hackathon Submission Overview
+# 🧠 MedMinds.AI  
+### Breaking Medical Language Barriers with Artificial Intelligence
 
-Project Name: MedMinds.AI
+---
 
-Category / Theme: Healthcare | AI for Social Good
+## 🏥 Hackathon Submission Overview
 
-Development Environment: Kiro IDE
+**Project Name:** MedMinds.AI  
+**Category / Theme:** Healthcare | AI for Social Good  
+**Development Environment:** Kiro IDE  
+**AI Model / API Used:** Google Gemini API  
 
-AI Model / API Used: Google Gemini API
+---
 
-🔗 Links
+## 🔗 Links
 
-Documentation Link: https://docs.google.com/document/d/191HCAubNria8Mhnp9kbQ3x7hUktxGytJVdJxhT9qWm4/edit?usp=sharing
+- **Documentation:** https://docs.google.com/document/d/191HCAubNria8Mhnp9kbQ3x7hUktxGytJVdJxhT9qWm4/edit?usp=sharing  
+- **Live Demo:** https://medminds.onrender.com/  
+- **YouTube Demo:** https://youtu.be/qj5wFumZI6Q  
 
-Live Demo: https://medminds.onrender.com/
+---
 
-YouTube Demo: https://youtu.be/qj5wFumZI6Q
+## 🩺 Problem Statement
 
-🩺 Problem Statement
+Medical reports, prescriptions, and diagnostic results are usually written in **complex medical terminology** that is difficult for common people to understand.
 
-Medical reports, prescriptions, and diagnostic results are usually written in complex medical terminology that is difficult for common people to understand.
+### Challenges faced by patients:
+- ❌ Medical jargon is not user-friendly  
+- ❌ No clear indication of whether a condition is **normal or critical**  
+- ❌ Language barriers for non-English speakers  
 
-Challenges faced by patients:
+These issues can lead to **confusion, anxiety, delayed treatment, and poor health awareness**.
 
-❌ Medical jargon is not user-friendly
+---
 
-❌ No clear indication of whether a condition is normal or critical
+## 💡 Solution Overview
 
-❌ Language barriers for non-English speakers
+**MedMinds.AI** is an AI-powered healthcare assistant designed to **simplify medical information** and make it understandable for everyone.
 
-These issues can lead to confusion, anxiety, delayed treatment, and poor health awareness.
+### What MedMinds.AI does:
+- Accepts medical data as **text**
+- Supports **PDF uploads** of medical reports
 
-💡 Solution Overview
+### Using Google Gemini API, MedMinds.AI:
+- 🧠 Converts medical jargon into **simple layman language**
+- 🚦 Classifies health parameters as **Critical / High / Normal / Low**
+- 📊 Provides an **overall health severity summary**
+- 🌍 Supports **multi-language explanations**
 
-MedMinds.AI is an AI-powered healthcare assistant designed to simplify medical information and make it understandable for everyone.
+> ⚠️ **Disclaimer:** This application is for general awareness only and does not replace professional medical advice.
 
-What MedMinds.AI does:
+---
 
-Accepts medical data as text
+## 🚀 Features
 
-Supports PDF uploads of medical reports
+- 📄 Upload medical reports (PDF / Text / Images)
+- 🔍 OCR-based text extraction (Tesseract + PyMuPDF)
+- 🤖 AI-powered medical report explanation
+- 🟢 Highlights normal values clearly
+- 🔴 Highlights abnormal values for quick attention
+- 🌐 REST API support for easy integration
 
+---
 
-Using Google Gemini API, MedMinds.AI:
+## 🛠️ Tech Stack
 
-🧠 Converts medical jargon into simple layman language
+- **Backend:** Flask (Python)  
+- **OCR:** Tesseract OCR, PyMuPDF (fitz)  
+- **AI:** Google Gemini API  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Others:** Flask-CORS, Pillow  
 
-🚦 Classifies health parameters as Critical / High / Normal / Low
+---
 
-📊 Provides an overall health severity summary
+## 📁 Project Structure
 
-🌍 Supports multi-language explanations
-
-⚠️ Disclaimer: This application is for general awareness only and does not replace professional medical advice.
-
-🚀 Features
-
-📄 Upload medical reports (PDF / Text / Images)
-
-🔍 OCR-based text extraction (Tesseract + PyMuPDF)
-
-🤖 AI-powered medical report explanation
-
-🟢 Highlights normal values clearly
-
-🔴 Highlights abnormal values for quick attention
-
-🌐 REST API support for easy integration
-
-🛠️ Tech Stack
-
-Backend: Flask (Python)
-
-OCR: Tesseract OCR, PyMuPDF (fitz)
-
-AI: Google Gemini API
-
-Frontend: HTML, CSS, JavaScript
-
-Others: Flask-CORS, Pillow
-
-📁 Project Structure
 MedMinds/
 │── app.py
 │── README.md
 │── requirements.txt
 │── .env
 │── routes/
-│   │── __init__.py
-│   │── explain_report.py
+│ │── init.py
+│ │── explain_report.py
 │── services/
-│   │── __init__.py
-│   │── ocr_service.py
-│   │── gemini_service.py
+│ │── init.py
+│ │── ocr_service.py
+│ │── gemini_service.py
 │── static/
-│   │── css/
-│   │   ├── chat.css
-│   │   ├── index.css
-│   │── js/
-│   │   ├── chat.js
-│   │   ├── index.js
-│   │── images/
-│   │   └── doctor-illustration.png
+│ │── css/
+│ │ ├── chat.css
+│ │ ├── index.css
+│ │── js/
+│ │ ├── chat.js
+│ │ ├── index.js
+│ │── images/
+│ │ └── doctor-illustration.png
 │── templates/
-│   │── index.html
-│   │── chat.html
+│ │── index.html
+│ │── chat.html
 
-⚙️ Installation & Setup
-1️⃣ Clone the Repository
+yaml
+Copy code
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/your-username/medminds-ai.git
 cd medminds-ai
-
 2️⃣ Create Virtual Environment
+bash
+Copy code
 python -m venv venv
 venv\Scripts\activate        # Windows
 source venv/bin/activate    # Linux / Mac
-
 3️⃣ Install Dependencies
+bash
+Copy code
 pip install -r requirements.txt
-
 4️⃣ Setup Environment Variables
-
 Create a .env file:
 
+env
+Copy code
 GEMINI_API_KEY=your_api_key_here
 PORT=5000
-
 5️⃣ Run the Application
+bash
+Copy code
 python app.py
-
-
 🚀 App runs at: http://localhost:5000
 
 📤 API Endpoint
@@ -142,6 +142,9 @@ Form-data
 file: PDF / Image medical report
 
 Response:
+
+json
+Copy code
 {
   "patient_name": "Ramesh Kumar",
   "summary": "Blood sugar levels are high",
@@ -153,9 +156,7 @@ Response:
     }
   ]
 }
-
 🔐 Rate Limit Note
-
 If you encounter 429 – Quota Exceeded:
 
 Check Gemini API usage
@@ -165,7 +166,6 @@ Reduce request frequency
 Upgrade API plan if required
 
 🎯 Use Cases
-
 👨‍⚕️ Patients understanding lab reports
 
 🏥 Rural healthcare & ASHA workers
@@ -175,16 +175,13 @@ Upgrade API plan if required
 📚 Medical awareness platforms
 
 📜 License
-
 This project is intended for educational and hackathon purposes only.
 
 ✨ Built with the mission of making medical reports simple, accessible, and understandable for everyone.
 
-![first_photo](https://github.com/user-attachments/assets/467c6cab-09c4-4243-987a-3888eab50819)
+![first_photo](https://github.com/user-attachments/assets/f08e588c-987e-43d3-b82e-d7967255c084)
 
-![Project_screenshot2](https://github.com/user-attachments/assets/44c1741c-7c37-4482-ae3e-54be47c4a5a0)
+![Project_screenshot2](https://github.com/user-attachments/assets/2e449d5f-6a0d-4617-845a-c61a409baf7a)
 
-![project3](https://github.com/user-attachments/assets/33b2f5e6-945a-45b8-bf4a-9fb4593fc220)
-
-
+![project3](https://github.com/user-attachments/assets/7d79a24c-94be-41a5-ad57-a8f0f9d9d049)
 
