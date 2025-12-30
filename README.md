@@ -79,24 +79,24 @@ MedMinds/
 │── requirements.txt
 │── .env
 │── routes/
-│ │── init.py
-│ │── explain_report.py
+│   │── __init__.py
+│   │── explain_report.py
 │── services/
-│ │── init.py
-│ │── ocr_service.py
-│ │── gemini_service.py
+│   │── __init__.py
+│   │── ocr_service.py
+│   │── gemini_service.py
 │── static/
-│ │── css/
-│ │ ├── chat.css
-│ │ ├── index.css
-│ │── js/
-│ │ ├── chat.js
-│ │ ├── index.js
-│ │── images/
-│ │ └── doctor-illustration.png
+│   │── css/
+│   │   ├── chat.css
+│   │   ├── index.css
+│   │── js/
+│   │   ├── chat.js
+│   │   ├── index.js
+│   │── images/
+│   │   └── doctor-illustration.png
 │── templates/
-│ │── index.html
-│ │── chat.html
+│   │── index.html
+│   │── chat.htmll
 
 
 ---
