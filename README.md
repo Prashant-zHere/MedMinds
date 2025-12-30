@@ -1,36 +1,87 @@
-# MedMinds.AI 🩺
+🧠 MedMinds.AI
+Breaking Medical Language Barriers with Artificial Intelligence
+🏥 Hackathon Submission Overview
 
-**MedMinds.AI** is a Flask-based web application that allows users to upload medical reports (PDF or image files), extract text using OCR, and get **simple, easy-to-understand explanations** of medical test results using AI.
+Project Name: MedMinds.AI
 
-> ⚠️ **Disclaimer:** This application is for general awareness only and does not replace professional medical advice.
+Category / Theme: Healthcare | AI for Social Good
 
----
+Development Environment: Kiro IDE
 
-## 🚀 Features
+AI Model / API Used: Google Gemini API
 
-* 📄 Upload medical reports (PDF / TEXT)
-* 🔍 OCR-based text extraction (Tesseract + PyMuPDF)
-* 🤖 AI-powered medical report explanation
-* 🟢 Highlights normal values
-* 🔴 Highlights abnormal values
-* 🌐 REST API support
-* 🧾 Downloadable explanation report
+🔗 Links
 
----
+Documentation Link: https://docs.google.com/document/d/191HCAubNria8Mhnp9kbQ3x7hUktxGytJVdJxhT9qWm4/edit?usp=sharing
 
-## 🛠️ Tech Stack
+Live Demo: https://medminds.onrender.com/
 
-* **Backend:** Flask (Python)
-* **OCR:** Tesseract OCR, PyMuPDF (fitz)
-* **AI:** Google Gemini API
-* **Frontend:** HTML, CSS, JavaScript
-* **Others:** Flask-CORS, Pillow
+YouTube Demo: https://youtu.be/qj5wFumZI6Q
 
----
+🩺 Problem Statement
 
-## 📁 Project Structure
+Medical reports, prescriptions, and diagnostic results are usually written in complex medical terminology that is difficult for common people to understand.
 
-```
+Challenges faced by patients:
+
+❌ Medical jargon is not user-friendly
+
+❌ No clear indication of whether a condition is normal or critical
+
+❌ Language barriers for non-English speakers
+
+These issues can lead to confusion, anxiety, delayed treatment, and poor health awareness.
+
+💡 Solution Overview
+
+MedMinds.AI is an AI-powered healthcare assistant designed to simplify medical information and make it understandable for everyone.
+
+What MedMinds.AI does:
+
+Accepts medical data as text
+
+Supports PDF uploads of medical reports
+
+
+Using Google Gemini API, MedMinds.AI:
+
+🧠 Converts medical jargon into simple layman language
+
+🚦 Classifies health parameters as Critical / High / Normal / Low
+
+📊 Provides an overall health severity summary
+
+🌍 Supports multi-language explanations
+
+⚠️ Disclaimer: This application is for general awareness only and does not replace professional medical advice.
+
+🚀 Features
+
+📄 Upload medical reports (PDF / Text / Images)
+
+🔍 OCR-based text extraction (Tesseract + PyMuPDF)
+
+🤖 AI-powered medical report explanation
+
+🟢 Highlights normal values clearly
+
+🔴 Highlights abnormal values for quick attention
+
+🌐 REST API support for easy integration
+
+🛠️ Tech Stack
+
+Backend: Flask (Python)
+
+OCR: Tesseract OCR, PyMuPDF (fitz)
+
+AI: Google Gemini API
+
+Frontend: HTML, CSS, JavaScript
+
+Others: Flask-CORS, Pillow
+
+📁 Project Structure
 MedMinds/
 │── app.py
 │── README.md
@@ -55,65 +106,42 @@ MedMinds/
 │── templates/
 │   │── index.html
 │   │── chat.html
-```
 
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the repository
-
-```bash
+⚙️ Installation & Setup
+1️⃣ Clone the Repository
 git clone https://github.com/your-username/medminds-ai.git
 cd medminds-ai
-```
 
-### 2️⃣ Create virtual environment
-
-```bash
+2️⃣ Create Virtual Environment
 python -m venv venv
-venv\Scripts\activate   # Windows
-source venv/bin/activate # Linux/Mac
-```
+venv\Scripts\activate        # Windows
+source venv/bin/activate    # Linux / Mac
 
-### 3️⃣ Install dependencies
-
-```bash
+3️⃣ Install Dependencies
 pip install -r requirements.txt
-```
 
-### 4️⃣ Setup Environment Variables
+4️⃣ Setup Environment Variables
 
-Create a `.env` file:
+Create a .env file:
 
-```
 GEMINI_API_KEY=your_api_key_here
 PORT=5000
-```
 
-### 5️⃣ Run the application
-
-```bash
+5️⃣ Run the Application
 python app.py
-```
 
-App will run at: **[http://localhost:5000](http://localhost:5000)**
 
----
+🚀 App runs at: http://localhost:5000
 
-## 📤 API Endpoint
+📤 API Endpoint
+POST /explain-report
+Request:
 
-### `POST /explain-report`
+Form-data
 
-**Request:**
+file: PDF / Image medical report
 
-* Form-data
-
-  * `file`: PDF / Image medical report
-
-**Response:**
-
-```json
+Response:
 {
   "patient_name": "Ramesh Kumar",
   "summary": "Blood sugar levels are high",
@@ -125,32 +153,38 @@ App will run at: **[http://localhost:5000](http://localhost:5000)**
     }
   ]
 }
-```
 
----
+🔐 Rate Limit Note
 
-## 🔐 Rate Limit Note
+If you encounter 429 – Quota Exceeded:
 
-If you face `429 Quota Exceeded` errors:
+Check Gemini API usage
 
-* Check Gemini API usage
-* Reduce request frequency
-* Upgrade API plan if required
+Reduce request frequency
 
----
+Upgrade API plan if required
 
-## 🎯 Use Cases
+🎯 Use Cases
 
-* Patients understanding lab reports
-* Rural health workers (ASHA)
-* Hackathons & health-tech demos
-* Medical awareness platforms
----
+👨‍⚕️ Patients understanding lab reports
 
-## 📜 License
+🏥 Rural healthcare & ASHA workers
 
-This project is for educational and hackathon use.
+💻 Hackathons & health-tech demos
 
----
+📚 Medical awareness platforms
 
-✨ *Built with the goal of making medical reports simple for everyone.*
+📜 License
+
+This project is intended for educational and hackathon purposes only.
+
+✨ Built with the mission of making medical reports simple, accessible, and understandable for everyone.
+
+![first_photo](https://github.com/user-attachments/assets/467c6cab-09c4-4243-987a-3888eab50819)
+
+![Project_screenshot2](https://github.com/user-attachments/assets/44c1741c-7c37-4482-ae3e-54be47c4a5a0)
+
+![project3](https://github.com/user-attachments/assets/33b2f5e6-945a-45b8-bf4a-9fb4593fc220)
+
+
+
