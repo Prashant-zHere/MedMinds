@@ -1,21 +1,17 @@
-# services/gemini_service.py
 import os
-from google import genai  # NEW: Use this instead of google.generativeai
+from google import genai  
 from dotenv import load_dotenv
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Load environment variables
 load_dotenv()
 
-# Get API key
 API_KEY = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
 if not API_KEY:
     logger.error("❌ API Key not found. Please set GOOGLE_API_KEY in .env file")
     raise ValueError("GOOGLE_API_KEY environment variable is required")
 
-# Initialize Gemini client with NEW API
 client = genai.Client(api_key=API_KEY)
 logger.info("✅ Gemini API configured successfully")
 
@@ -47,7 +43,6 @@ def generate_explanation(report_text: str, language: str) -> str:
     Generate medical report explanation using Gemini
     """
 
-    # Language enforcement
     if language == "mr":
         language_instruction = """
 IMPORTANT:
@@ -76,7 +71,6 @@ IMPORTANT:
     )
 
     try:
-        # Generate content using the NEW API
         result = client.models.generate_content(
             model="gemini-2.5-flash",  # Updated model name
             contents=prompt
