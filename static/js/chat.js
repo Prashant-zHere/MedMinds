@@ -1073,7 +1073,7 @@ function generateAIResponse(userInput) {
         
 const backToHomeBtn = document.getElementById('backToHomeBtn');
 backToHomeBtn.addEventListener('click', function() {
-    window.location.href = '/';
+    window.location.href = 'index.html';
 });
 
     

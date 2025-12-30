@@ -1,0 +1,7 @@
+Flask==2.3.3
+flask-cors==4.0.0
+google-genai==0.3.0
+python-dotenv==1.0.0
+PyPDF2==3.0.1
+PyMuPDF==1.23.14
+werkzeug==2.3.7
