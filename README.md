@@ -15,8 +15,8 @@
 ## 🔗 Links
 
 - **Documentation:** https://docs.google.com/document/d/191HCAubNria8Mhnp9kbQ3x7hUktxGytJVdJxhT9qWm4/edit?usp=sharing  
-- **Live Demo:** https://medminds.onrender.com/  
-- **YouTube Demo:** https://youtu.be/qj5wFumZI6Q  
+- **Deployed link:** https://medminds.onrender.com/  
+- **YouTube Link:** https://youtu.be/qj5wFumZI6Q  
 
 ---
 
@@ -60,14 +60,12 @@ These issues can lead to **confusion, anxiety, delayed treatment, and poor healt
 * 🟢 Highlights normal values
 * 🔴 Highlights abnormal values
 * 🌐 REST API support
-* 🧾 Downloadable explanation report
 
 ---
 
 ## 🛠️ Tech Stack
 
 * **Backend:** Flask (Python)
-* **OCR:** Tesseract OCR, PyMuPDF (fitz)
 * **AI:** Google Gemini API
 * **Frontend:** HTML, CSS, JavaScript
 * **Others:** Flask-CORS, Pillow
@@ -155,7 +153,7 @@ App will run at: **[http://localhost:5000](http://localhost:5000)**
 
 * Form-data
 
-  * `file`: PDF / Image medical report
+  * `file`: PDF
 
 **Response:**
 
